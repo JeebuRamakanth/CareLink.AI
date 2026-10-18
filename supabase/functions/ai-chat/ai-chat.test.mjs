@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs'
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8')
 
 test('AI edge function documents Telugu and romanized Telugu support', () => {
-  const source = read('../functions/ai-chat/index.ts')
+  const source = read('./index.ts')
   assert.match(source, /romanized Telugu/)
   assert.match(source, /Telugu script/)
   assert.match(source, /SYSTEM_PROMPT/)
@@ -27,7 +27,7 @@ test('AI edge function validates image input and passes it as multimodal content
 })
 
 test('original and replica expose SOS, emergency directions and image upload', () => {
-  for (const path of ['../../src/App.tsx', '../../carelink-ai-replica/src/App.tsx']) {
+  for (const path of ['../../../src/App.tsx', '../../../carelink-ai-replica/src/App.tsx']) {
     const app = read(path)
     assert.match(app, /tel:112/)
     assert.match(app, /openEmergencyDirections/)

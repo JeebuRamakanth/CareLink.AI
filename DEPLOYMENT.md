@@ -11,6 +11,7 @@
    - `supabase/migrations/0005_source_backed_hospital_directory.sql`
    - `supabase/migrations/0006_verified_private_hospitals.sql`
    - `supabase/migrations/0007_import_researched_healthcare_directory.sql`
+   - `supabase/migrations/0008_blood_bank_directory.sql`
 3. Migration 0007 imports the 112 facility records in the user's 08-Sep-2026 research document, including departments/specialties and the doctor names explicitly listed in that document. The file describes these as a research working set, not a complete official census. Details marked “Not publicly verified” remain unverified.
 4. Migration 0007 also adds profile email/phone fields and keeps them synchronized from Supabase Auth metadata. Passwords remain managed by Supabase Auth and are never copied into the profile table.
 5. In **Project Settings → API Keys**, copy the Project URL and the publishable key. Put them in local `.env.local` as `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
@@ -35,4 +36,4 @@ The app uses a clearly labelled illustrative healthcare image where no facility-
 
 ## 5. Blood page
 
-The Blood page is a separate page in the app, but live blood-bank stock, blood-group availability and donor matching are not yet connected to a verified data provider. The UI intentionally does not invent stock counts or donor records.
+The Blood page reads from `public.blood_banks`, seeded by migration 0008 with source-linked public directory records including the Indian Red Cross centres in Machilipatnam and Vijayawada. Phone/address details should be reconfirmed with the centre. This is a directory only: live blood-group stock, donor availability and reservation are not provided by this migration. The UI intentionally does not invent stock counts or donor records.

@@ -23,3 +23,8 @@
 .home-search-field .button{padding:11px 15px}
 .home-search-field input:focus-visible{outline:2px solid #79cbb8;outline-offset:2px;border-radius:5px}
 @media(max-width:760px){.hospital-filters{align-items:stretch;display:grid;grid-template-columns:1fr 1fr;padding:13px;gap:10px}.hospital-filters>label:not(.verified-filter){min-width:0}.hospital-filters .verified-filter{grid-column:1/-1}.hospital-filters>.button{grid-column:1/-1}.results-summary{align-items:flex-start;flex-direction:column;gap:4px}.home-search{margin-top:22px}.home-search-field{flex-wrap:wrap}.home-search-field input{flex-basis:calc(100% - 35px)}.home-search-field .button{width:100%}}
+
+.department-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}
+.department-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid #d9eee5;cursor:pointer;transition:background .15s,border-color .15s}
+.department-chip:hover{background:#d8f1e7;border-color:#9ed7c5}
+.department-chip:focus-visible{outline:3px solid #79cbb8;outline-offset:3px}

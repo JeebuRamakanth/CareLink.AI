@@ -9,7 +9,7 @@ test('AI edge function supports Telugu, romanized Telugu, and health-safety guid
   assert.match(source, /romanized Telugu/)
   assert.match(source, /Telugu script/)
   assert.match(source, /SYSTEM_PROMPT/)
-  assert.match(source, /not a substitute for a clinician/)
+  assert.match(source, /not a substitute for a clinician|not a replacement for a clinician/)
 })
 
 test('AI edge function has an emergency-first 112 response and avoids dispatch claims', () => {

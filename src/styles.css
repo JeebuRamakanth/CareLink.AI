@@ -28,3 +28,7 @@
 .department-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid #d9eee5;cursor:pointer;transition:background .15s,border-color .15s}
 .department-chip:hover{background:#d8f1e7;border-color:#9ed7c5}
 .department-chip:focus-visible{outline:3px solid #79cbb8;outline-offset:3px}
+
+.hospital-card-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.hospital-card-actions .text-button{white-space:nowrap}
+@media(max-width:440px){.card-bottom{align-items:flex-start;flex-direction:column}.hospital-card-actions{justify-content:flex-start}}

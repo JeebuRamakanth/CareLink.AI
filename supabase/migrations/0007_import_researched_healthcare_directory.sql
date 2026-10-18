@@ -44,6 +44,11 @@ for each row execute procedure public.handle_user_profile_update();
 
 delete from public.doctors where lower(full_name) like '%sample%';
 delete from public.hospitals where lower(name) like '%(sample)%' or lower(name) like 'carelink community hospital%';
+-- Replace earlier seed aliases with the canonical facility names from the user's research file.
+delete from public.hospitals
+where (lower(name)='district hospital' and lower(city)='machilipatnam')
+   or lower(name)='andhra hospitals - machilipatnam branch'
+   or lower(name)='dr madhu super speciality hospital - machilipatnam branch';
 
 with source_rows(name,city,address,phone,category,ownership,departments,source_notes,verification,doctor_count,source_url,specialties) as (
  values

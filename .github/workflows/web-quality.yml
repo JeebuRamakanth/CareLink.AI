@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,3 +14,5 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
+      - name: Test CareLink AI backend safety and UI wiring
+        run: node --test supabase/functions/ai-chat/ai-chat.test.mjs

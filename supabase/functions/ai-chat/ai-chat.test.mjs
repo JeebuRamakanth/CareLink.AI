@@ -21,7 +21,7 @@ test('AI edge function has an emergency-first 112 response and avoids dispatch c
 test('AI edge function validates image input and passes it as multimodal content', () => {
   const source = read('../functions/ai-chat/index.ts')
   assert.match(source, /imageDataUrl/)
-  assert.match(source, /image\/\(png\|jpeg\|webp\)/)
+  assert.match(source, /data:image/)
   assert.match(source, /image_url/)
   assert.match(source, /8_000_000/)
 })

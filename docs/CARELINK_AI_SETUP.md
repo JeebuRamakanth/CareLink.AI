@@ -1,47 +1,49 @@
 # CareLink.AI assistant setup and safety notes
 
-## What this implementation adds
+## What the AI implementation includes
 
-- The `ai-chat` Supabase Edge Function instructs the configured model to understand English, Telugu script, romanized Telugu, and mixed Telugu-English.
-- The function checks a limited list of high-risk emergency phrases before calling the model and returns immediate advice to contact India's emergency number **112**. This is a basic keyword guard, not a clinically validated triage engine; it can miss emergencies and can flag non-emergencies.
-- The chat UI accepts PNG, JPEG, and WebP images up to 5 MB and sends the image to the configured vision-capable chat-completions model. Users should upload only images they are comfortable sending to the configured AI provider. Image interpretation may be wrong and must not be treated as a diagnosis.
-- The chat has a direct `tel:112` call link and a location-permission-based Google Maps search for emergency hospitals. It does **not** notify an ambulance service, transmit location to emergency dispatch, or guarantee an ambulance pickup.
-- Hospital directory links now open Google Maps directions to the selected facility. Google Maps may ask the user to confirm or enable their location.
+- English, Telugu script, romanized Telugu, and mixed Telugu-English response guidance.
+- Emergency-first keyword guard for a limited set of red flags with immediate India 112 guidance; this is not clinically validated and can miss emergencies or flag non-emergencies.
+- Image input for PNG/JPEG/WebP through a vision-capable chat-completions model. Images are sent to the configured provider; never upload real patient records until privacy, consent, access controls, and provider retention terms have been reviewed.
+- Request validation, image/body size limits, origin allowlisting, provider timeout handling, and clearer provider quota/key error responses.
+- Direct `tel:112` UI action and Google Maps emergency-hospital search/directions. This app does not dispatch ambulances or automatically contact emergency services.
 
-## Required deployment steps
+## Required one-time backend deployment
 
-These steps require access to the Supabase project and a valid AI provider API key. Do not commit API keys to GitHub or put them in any `VITE_*` browser variable.
+These steps require access to the Supabase project and a valid AI provider API key. Never commit keys to GitHub or put them in `VITE_*` browser variables.
 
-1. In the repository root, install/use the Supabase CLI and sign in:
+1. Open a terminal in the repository root and authenticate:
    ```bash
    npx supabase login
    ```
-2. Set the Edge Function secrets. Run this in PowerShell or a terminal, replacing the placeholder with your real key locally. Do not paste the key into chat or commit it:
+2. Set secrets (PowerShell works; replace the placeholder locally, do not send the key in chat):
    ```bash
-   npx supabase secrets set --project-ref drpbukyjdkzhczabisxx AI_API_KEY=YOUR_PRIVATE_PROVIDER_KEY APP_ORIGIN=https://carelinkai.vercel.app
+   npx supabase secrets set --project-ref drpbukyjdkzhczabisxx AI_API_KEY=YOUR_PRIVATE_PROVIDER_KEY APP_ORIGINS=https://carelinkai.vercel.app,https://carelink.ai
    ```
-   Optionally set a compatible model:
+   Optional provider configuration:
    ```bash
    npx supabase secrets set --project-ref drpbukyjdkzhczabisxx AI_MODEL=gpt-4o-mini
    ```
-3. Deploy the Edge Function:
+   If using a compatible non-OpenAI provider, also set its base URL:
+   ```bash
+   npx supabase secrets set --project-ref drpbukyjdkzhczabisxx AI_API_BASE_URL=https://YOUR-COMPATIBLE-PROVIDER/v1
+   ```
+3. Deploy the function:
    ```bash
    npx supabase functions deploy ai-chat --project-ref drpbukyjdkzhczabisxx
    ```
-4. In Supabase Dashboard → Edge Functions → `ai-chat` → Logs, check for deployment and provider errors. Confirm the `AI_API_KEY` secret exists without exposing its value.
-5. In the deployed app, sign in and test:
-   - English: `I have a fever`
-   - Romanized Telugu: `naaku fever ga undi`
-   - Telugu script: `నాకు జ్వరం ఉంది`
-   - Emergency test: `I have chest pain and difficulty breathing` — should immediately advise calling 112.
-   - Image test: upload a non-sensitive sample report/image and ask for readable values only.
-   - Hospital directions and location permission.
+4. In Supabase Dashboard → Edge Functions → `ai-chat` → Logs, inspect deployment and runtime errors. Check that the secret exists without exposing its value.
+5. Sign in to the deployed app and test:
+   - `naaku fever ga undi`
+   - `నాకు జ్వరం ఉంది`
+   - `I have chest pain and difficulty breathing` (should immediately advise calling 112)
+   - a non-sensitive sample image/report, asking only for legible values
+   - hospital directions and image upload on desktop and mobile.
 
-## Safety and limitations
+## Safety and production limitations
 
-- No model can guarantee that a symptom is harmless or diagnose every disease from chat or an image. Do not show “100% safe” or “no danger” claims.
-- The current emergency phrase check is deliberately conservative but incomplete. It is not a substitute for clinician-designed triage rules, local clinical validation, monitoring, or red-team testing.
-- Medication recommendations must not be treated as prescriptions. The assistant is instructed not to guess a patient's age, weight, allergies, pregnancy status, or dose.
-- The SOS control calls the phone's dialer for 112 only if the device/browser supports it. The user must place/confirm the call. The app does not auto-call hospitals or dispatch an ambulance.
-- Image content is sent to the configured provider's API. Review that provider's data retention/privacy terms before using real patient records.
-- Deployment, secret configuration, provider billing/quota, production browser testing, and clinical validation must be completed before claiming the feature is live or production-safe.
+- AI chat is informational, not diagnosis, prescription, or a replacement for a clinician. The emergency keyword check is incomplete and not clinically validated; it must not be presented as a reliable triage system.
+- Never claim a symptom is definitely harmless. Do not infer a patient's age, weight, allergies, pregnancy status, or medication dose.
+- The SOS control opens the device dialer only when supported; the user must confirm the call. No ambulance is automatically called or dispatched.
+- Image content is sent to the configured AI provider. Review that provider's privacy and retention terms before sending patient data.
+- Backend source changes alone do not deploy the Supabase Edge Function or configure a paid provider key. A valid key, deployment, quota, production testing, monitoring, and clinical review are still required before describing this as production-ready.

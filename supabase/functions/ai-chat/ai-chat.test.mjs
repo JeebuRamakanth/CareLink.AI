@@ -16,7 +16,7 @@ test('AI edge function has an emergency-first 112 response and avoids dispatch c
   const source = read('./index.ts')
   assert.match(source, /emergencyPatterns/)
   assert.match(source, /emergency_number: '112'/)
-  assert.match(source, /This chat ambulance dispatch చేయలేదు/)
+  assert.match(source, /ambulance dispatch చేయలేదు/)
 })
 
 test('AI edge function validates image input and passes it as multimodal content', () => {

@@ -167,7 +167,7 @@ with source_rows(name,city,address,phone,category,ownership,departments,source_n
 )
 update public.hospitals h set address=s.address,phone=s.phone,category=s.category,
  description=concat_ws(' | ',nullif(s.departments,''),nullif(s.source_notes,'')),
- is_verified=(s.verification ilike '%confirmed%'),source_url=s.source_url,source_notes=s.source_notes,
+ is_verified=(s.verification ilike '✅ Confirmed%'),source_url=s.source_url,source_notes=s.source_notes,
  source_verification=s.verification,ownership=s.ownership,specialties=s.specialties,
  reported_doctor_count=s.doctor_count,last_verified_at='2026-09-08 00:00:00+00'
 from source_rows s where lower(h.name)=lower(s.name) and lower(h.city)=lower(s.city);
@@ -289,7 +289,7 @@ with source_rows(name,city,address,phone,category,ownership,departments,source_n
 )
 insert into public.hospitals(name,city,address,phone,category,description,image_url,is_verified,source_url,source_notes,source_verification,ownership,specialties,reported_doctor_count,image_source_url,last_verified_at)
 select s.name,s.city,s.address,s.phone,s.category,concat_ws(' | ',nullif(s.departments,''),nullif(s.source_notes,'')), '',
- (s.verification ilike '%confirmed%'),s.source_url,s.source_notes,s.verification,s.ownership,s.specialties,s.doctor_count,'','2026-09-08 00:00:00+00'
+ (s.verification ilike '✅ Confirmed%'),s.source_url,s.source_notes,s.verification,s.ownership,s.specialties,s.doctor_count,'','2026-09-08 00:00:00+00'
 from source_rows s where not exists(select 1 from public.hospitals h where lower(h.name)=lower(s.name) and lower(h.city)=lower(s.city));
 
 with clinician_rows(hospital_name,city,full_name,specialty,source_url) as (
